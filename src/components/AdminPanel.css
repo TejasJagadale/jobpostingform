@@ -90,8 +90,10 @@
 
 /* Table Styles */
 .table-responsive {
-  width: 100%;
-  overflow-x: auto;
+  overflow-x: scroll;
+  padding: 0px;
+  max-height: 65vh;
+  overflow-y: auto;
 }
 
 tbody {
@@ -101,6 +103,7 @@ tbody {
 table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 0.95rem;
 }
 
 th,
@@ -200,10 +203,9 @@ tr:hover {
     right: auto !important;
     bottom: auto !important;
     transform: translate(-50%, -50%) !important;
-    padding: 4px !important;
+    padding: 10px !important;
   }
 
-  /* Reset table elements to block */
   table,
   thead,
   tbody,
@@ -211,7 +213,6 @@ tr:hover {
   td,
   tr {
     display: block;
-    padding: 0px;
   }
 
   /* Hide table headers */
@@ -226,10 +227,7 @@ tr:hover {
     border: 1px solid #ddd;
     border-radius: 8px;
     margin-bottom: 1rem;
-    padding: 0.4rem;
-    /* display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem; */
+    padding: 1rem;
     display: flex;
     flex-direction: column;
   }
@@ -237,7 +235,6 @@ tr:hover {
   /* Style each data cell */
   td {
     border: none;
-    font-size: 13px;
     padding: 0.25rem 0;
     position: relative;
     padding-left: 45%; /* Space for the label */
@@ -280,7 +277,6 @@ tr:hover {
   /* Ensure content doesn't overlap with labels */
   td > * {
     display: block;
-    overflow: hidden;
     text-overflow: ellipsis;
   }
 
@@ -289,10 +285,17 @@ tr:hover {
     padding: 0.4rem 0.8rem;
     font-size: 0.8rem;
   }
+
+  .table-responsive {
+    overflow-x: scroll;
+    padding: 0px;
+    max-height: 95vh;
+    overflow-y: auto;
+  }
 }
 
-@media (max-width: 576px) {
-  /* .admin-panel h1 {
+/* @media (max-width: 576px) {
+  .admin-panel h1 {
     font-size: 1.6rem;
   }
 
@@ -309,5 +312,5 @@ tr:hover {
   .actions {
     flex-direction: column;
     gap: 0.3rem;
-  } */
-}
+  }
+} */
