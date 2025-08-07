@@ -95,7 +95,6 @@ const AdminPanel = () => {
       transform: "translate(-50%, -50%)",
       width: "80%",
       maxWidth: "800px",
-      maxHeight: "80vh",
       overflow: "auto",
       borderRadius: "8px",
       padding: "20px"

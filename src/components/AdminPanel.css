@@ -52,7 +52,7 @@
   inset: 50% auto auto 50% !important;
   transform: translate(-50%, -50%) !important;
   width: 1200px !important;
-  height: 90vh;
+  height: 100vh;
   border-radius: 12px !important;
   overflow: hidden !important;
 }
@@ -186,6 +186,14 @@ tr:hover {
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
+  .modal-header {
+    padding: 0.5rem;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dfe6e9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   .modal-header h2 {
     margin: 0;
     color: #2c3e50;
@@ -197,13 +205,13 @@ tr:hover {
 
   .ReactModal__Content {
     width: 95% !important;
-    max-height: 90vh !important;
+    height: 98vh !important;
     top: 50% !important;
     left: 50% !important;
     right: auto !important;
     bottom: auto !important;
     transform: translate(-50%, -50%) !important;
-    padding: 10px !important;
+    padding: 0px !important;
   }
 
   table,
@@ -226,7 +234,7 @@ tr:hover {
   tr {
     border: 1px solid #ddd;
     border-radius: 8px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.3rem;
     padding: 1rem;
     display: flex;
     flex-direction: column;
