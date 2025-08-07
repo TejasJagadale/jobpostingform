@@ -1,0 +1,234 @@
+/* AdminPanel.css - Professional Dashboard Style */
+
+/* Base Styles */
+.admin-panel {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  color: #2c3e50;
+}
+
+.admin-panel h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+/* View Jobs Button */
+.view-jobs-btn {
+  background: #3498db;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 2rem auto;
+  box-shadow: 0 2px 10px rgba(52, 152, 219, 0.3);
+}
+
+.view-jobs-btn:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+}
+
+/* Modal Styles */
+.ReactModal__Overlay {
+  background: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+}
+
+.ReactModal__Content {
+  border: none !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  padding: 0 !important;
+  inset: 50% auto auto 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 1200px !important;
+  height: 90vh;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+.modal-header {
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #dfe6e9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 1.5rem;
+}
+
+.close-modal-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #7f8c8d;
+  transition: all 0.2s ease;
+  line-height: 1;
+  padding: 0 0.5rem;
+}
+
+.close-modal-btn:hover {
+  color: #e74c3c;
+  transform: scale(1.1);
+}
+
+/* Table Styles */
+.table-responsive {
+  overflow-x: auto;
+  padding: 0px;
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+tbody {
+padding: 10px
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+th,
+td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+th {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #34495e;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+tr:hover {
+  background: #f8f9fa;
+}
+
+/* Action Buttons */
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-btn {
+  background: #3498db;
+  color: white;
+}
+
+.edit-btn:hover {
+  background: #2980b9;
+  transform: translateY(-1px);
+}
+
+.delete-btn {
+  background: #e74c3c;
+  color: white;
+}
+
+.delete-btn:hover {
+  background: #c0392b;
+  transform: translateY(-1px);
+}
+
+/* Status Messages */
+.loading,
+.error,
+.no-jobs {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.1rem;
+}
+
+.loading {
+  color: #3498db;
+}
+
+.error {
+  color: #e74c3c;
+}
+
+.no-jobs {
+  color: #7f8c8d;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .modal-header h2 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.1rem;
+  }
+  .admin-panel {
+    padding: 0.7rem;
+  }
+
+  .ReactModal__Content {
+    width: 95% !important;
+  }
+
+  th,
+  td {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-panel h1 {
+    font-size: 1.8rem;
+  }
+
+  .table-responsive {
+    padding: 1rem;
+  }
+
+  th,
+  td {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+}
