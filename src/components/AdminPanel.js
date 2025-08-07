@@ -21,7 +21,9 @@ const AdminPanel = () => {
   const fetchJobs = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("https://todayjobsbackend.onrender.com/api/jobs");
+      const response = await axios.get(
+        "https://todayjobsbackend.onrender.com/api/jobs"
+      );
       setJobs(response.data);
       setError(null);
     } catch (err) {
@@ -71,7 +73,9 @@ const AdminPanel = () => {
   const handleDelete = async (jobId) => {
     if (!window.confirm("Are you sure you want to delete this job?")) return;
     try {
-      await axios.delete(`https://todayjobsbackend.onrender.com/api/jobs/${jobId}`);
+      await axios.delete(
+        `https://todayjobsbackend.onrender.com/api/jobs/${jobId}`
+      );
       setJobs(jobs.filter((job) => job._id !== jobId));
       alert("Job deleted successfully!");
     } catch (err) {
@@ -154,17 +158,17 @@ const AdminPanel = () => {
               <tbody>
                 {jobs.map((job) => (
                   <tr key={job._id}>
-                    <td>{job.title}</td>
-                    <td>{job.company}</td>
-                    <td>{job.location}</td>
-                    <td>{job.type}</td>
-                    <td>{job.category}</td>
+                    <td data-label="Title">{job.title}</td>
+                    <td data-label="Company">{job.company}</td>
+                    <td data-label="Location">{job.location}</td>
+                    <td data-label="Type">{job.type}</td>
+                    <td data-label="Category">{job.category}</td>
                     <td className="actions">
                       <button
                         className="edit-btn"
                         onClick={() => {
                           handleEdit(job);
-                          setIsModalOpen(false); // Close modal when editing
+                          setIsModalOpen(false);  
                         }}
                       >
                         Edit

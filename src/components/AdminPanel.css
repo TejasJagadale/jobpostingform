@@ -90,20 +90,17 @@
 
 /* Table Styles */
 .table-responsive {
+  width: 100%;
   overflow-x: auto;
-  padding: 0px;
-  max-height: 65vh;
-  overflow-y: auto;
 }
 
 tbody {
-padding: 10px
+  padding: 10px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.95rem;
 }
 
 th,
@@ -197,12 +194,94 @@ tr:hover {
 
   .ReactModal__Content {
     width: 95% !important;
+    max-height: 90vh !important;
+    top: 50% !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: translate(-50%, -50%) !important;
+    padding: 4px !important;
   }
 
+  /* Reset table elements to block */
+  table,
+  thead,
+  tbody,
   th,
+  td,
+  tr {
+    display: block;
+    padding: 0px;
+  }
+
+  /* Hide table headers */
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  /* Style each job row as a card */
+  tr {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    padding: 0.4rem;
+    /* display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem; */
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Style each data cell */
   td {
-    padding: 0.8rem;
-    font-size: 0.9rem;
+    border: none;
+    font-size: 13px;
+    padding: 0.25rem 0;
+    position: relative;
+    padding-left: 45%; /* Space for the label */
+    min-height: 1.5em; /* Ensure consistent height */
+  }
+
+  /* Style the pseudo-element labels */
+  td:before {
+    position: absolute;
+    left: 0.5rem;
+    width: 40%;
+    padding-right: 0.5rem;
+    white-space: nowrap;
+    font-weight: bold;
+    content: attr(data-label);
+    color: #555; /* Make labels slightly muted */
+  }
+
+  /* Special handling for action buttons */
+  .actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-around;
+    padding-left: 0 !important;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #eee;
+  }
+
+  .actions:before {
+    display: none;
+  }
+
+  .actions button {
+    flex: 1;
+    max-width: 120px;
+    margin: 0 0.25rem;
+  }
+
+  /* Ensure content doesn't overlap with labels */
+  td > * {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .edit-btn,
@@ -213,8 +292,8 @@ tr:hover {
 }
 
 @media (max-width: 576px) {
-  .admin-panel h1 {
-    font-size: 1.8rem;
+  /* .admin-panel h1 {
+    font-size: 1.6rem;
   }
 
   .table-responsive {
@@ -230,5 +309,5 @@ tr:hover {
   .actions {
     flex-direction: column;
     gap: 0.3rem;
-  }
+  } */
 }
