@@ -339,7 +339,7 @@ textarea:hover {
 @media (max-width: 480px) {
   .job-form-container {
     padding: 0.2rem 0.7rem;
-    margin: 0.5rem;
+    margin: 0px;
     border-radius: 10px;
   }
 
