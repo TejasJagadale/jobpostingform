@@ -42,69 +42,6 @@ const JobForm = ({ onSubmit, initialData = {}, isEditMode = false }) => {
     return category === "Govt" ? govtTypes : itTypes;
   };
 
-  // Job titles based on category
-  const getJobTitles = (category) => {
-    const itTitles = [
-      "Software Engineer",
-      "Data Analyst",
-      "DevOps Engineer",
-      "UI/UX Designer",
-      "Product Manager",
-      "QA Engineer",
-      "Cloud Architect"
-    ];
-
-    const govtTitles = [
-      "Administrative Officer",
-      "Tax Inspector",
-      "Banking Officer",
-      "Police Constable",
-      "Forest Officer",
-      "Railway Engineer",
-      "Public Health Specialist"
-    ];
-
-    return category === "Govt" ? govtTitles : itTitles;
-  };
-
-  // Companies based on category
-  const getCompanies = (category) => {
-    const itCompanies = [
-      "TCS",
-      "Infosys",
-      "Wipro",
-      "Google",
-      "Amazon",
-      "Microsoft",
-      "Zoho",
-      "HCL"
-    ];
-
-    const govtCompanies = [
-      "UPSC",
-      "State PSC",
-      "RBI",
-      "Indian Railways",
-      "ISRO",
-      "DRDO",
-      "Municipal Corporation",
-      "Public Sector Banks"
-    ];
-
-    return category === "Govt" ? govtCompanies : itCompanies;
-  };
-
-  const locations = [
-    "Bangalore",
-    "Chennai",
-    "Hyderabad",
-    "Pune",
-    "Mumbai",
-    "Delhi",
-    "Coimbatore",
-    "Remote"
-  ];
-
   useEffect(() => {
     if (isEditMode && initialData) {
       const requirementsStr = Array.isArray(initialData.requirements)
@@ -131,15 +68,9 @@ const JobForm = ({ onSubmit, initialData = {}, isEditMode = false }) => {
       // If category changes, reset dependent fields
       if (name === "category") {
         const newTypes = getJobTypes(value);
-        const newTitles = getJobTitles(value);
-        const newCompanies = getCompanies(value);
-
         return {
           ...newState,
-          type: newTypes[0],
-          title: "",
-          company: ""
-          // Keep other fields as is
+          type: newTypes[0]
         };
       }
 
@@ -206,9 +137,7 @@ const JobForm = ({ onSubmit, initialData = {}, isEditMode = false }) => {
     }
   };
 
-  // Get current options based on selected category
-  const currentJobTitles = getJobTitles(jobData.category);
-  const currentCompanies = getCompanies(jobData.category);
+  // Get current job types based on selected category
   const currentJobTypes = getJobTypes(jobData.category);
 
   return (
@@ -233,19 +162,14 @@ const JobForm = ({ onSubmit, initialData = {}, isEditMode = false }) => {
 
         <div className="form-group">
           <label>Job Title*</label>
-          <select
+          <input
+            type="text"
             name="title"
             value={jobData.title}
             onChange={handleChange}
             className={errors.title ? "error" : ""}
-          >
-            <option value="">Select Job Title</option>
-            {currentJobTitles.map((title) => (
-              <option key={title} value={title}>
-                {title}
-              </option>
-            ))}
-          </select>
+            placeholder="Enter job title"
+          />
           {errors.title && (
             <span className="error-message">{errors.title}</span>
           )}
@@ -254,19 +178,14 @@ const JobForm = ({ onSubmit, initialData = {}, isEditMode = false }) => {
         <div className="form-row">
           <div className="form-group">
             <label>Company*</label>
-            <select
+            <input
+              type="text"
               name="company"
               value={jobData.company}
               onChange={handleChange}
               className={errors.company ? "error" : ""}
-            >
-              <option value="">Select Company</option>
-              {currentCompanies.map((company) => (
-                <option key={company} value={company}>
-                  {company}
-                </option>
-              ))}
-            </select>
+              placeholder="Enter company name"
+            />
             {errors.company && (
               <span className="error-message">{errors.company}</span>
             )}
@@ -274,19 +193,14 @@ const JobForm = ({ onSubmit, initialData = {}, isEditMode = false }) => {
 
           <div className="form-group">
             <label>Location*</label>
-            <select
+            <input
+              type="text"
               name="location"
               value={jobData.location}
               onChange={handleChange}
               className={errors.location ? "error" : ""}
-            >
-              <option value="">Select Location</option>
-              {locations.map((location) => (
-                <option key={location} value={location}>
-                  {location}
-                </option>
-              ))}
-            </select>
+              placeholder="Enter job location"
+            />
             {errors.location && (
               <span className="error-message">{errors.location}</span>
             )}
