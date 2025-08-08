@@ -1,129 +1,167 @@
-/* AdminPanel.css - Professional Dashboard Style */
+/* AdminPanel.css - Mobile First Approach */
 
-/* Base Styles */
-.admin-panel {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-  color: #2c3e50;
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2c3e50;
+  --accent-color: #e74c3c;
+  --light-gray: #f8f9fa;
+  --dark-gray: #343a40;
+  --text-color: #495057;
 }
 
-.admin-panel h1 {
-  text-align: center;
-  margin-bottom: 1rem;
-  color: #2c3e50;
-  font-size: 1.6rem;
-  font-weight: 700;
-}
-
-/* View Jobs Button */
-.view-jobs-btn {
-  background: #3498db;
-  color: white;
-  padding: 0.4rem 0.75rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: block;
-  margin: 1rem auto;
-  box-shadow: 0 2px 10px rgba(52, 152, 219, 0.3);
-}
-
-.view-jobs-btn:hover {
-  background: #2980b9;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
-}
-
-/* Modal Styles */
-.ReactModal__Overlay {
-  background: rgba(0, 0, 0, 0.5) !important;
-  backdrop-filter: blur(4px);
-  z-index: 1000;
-}
-
-.ReactModal__Content {
-  border: none !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  padding: 0 !important;
-  inset: 50% auto auto 50% !important;
-  transform: translate(-50%, -50%) !important;
-  width: 1200px !important;
-  height: 100vh;
-  border-radius: 12px !important;
-  overflow: hidden !important;
-}
-
-.modal-header {
-  padding: 1.5rem;
-  background: #f8f9fa;
-  border-bottom: 1px solid #dfe6e9;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-header h2 {
+* {
+  box-sizing: border-box;
   margin: 0;
-  color: #2c3e50;
-  font-size: 1.5rem;
+  padding: 0;
 }
 
-.close-modal-btn {
-  background: none;
-  border: none;
-  font-size: 1.8rem;
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text-color);
+}
+
+/* Dashboard Layout */
+.admin-dashboard {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+}
+
+.sidebar {
+  width: 250px;
+  background: #333;
+  color: white;
+  height: 100vh;
+  position: fixed;
+  left: -250px;
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.sidebar.show {
+  left: 0;
+  position: fixed;
+}
+
+.main-content {
+  flex: 1;
+  padding: 1rem;
+  transition: all 0.3s ease;
+  margin-left: 250px;
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+  display: none;
+}
+
+/* Sidebar Styles */
+.sidebar-header {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-header h2 {
+  font-size: 1.2rem;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 1rem 0;
+}
+
+.sidebar-menu li {
+  padding: 0.8rem 1rem;
   cursor: pointer;
-  color: #7f8c8d;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   transition: all 0.2s ease;
-  line-height: 1;
-  padding: 0 0.5rem;
 }
 
-.close-modal-btn:hover {
-  color: #e74c3c;
-  transform: scale(1.1);
+.sidebar-menu li:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-menu li.active {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+}
+
+.sidebar-menu li i {
+  font-size: 1.1rem;
+}
+
+/* Main Content Styles */
+.dashboard-overview h1,
+.view-jobs-section h1,
+.form-section h1 {
+  margin-bottom: 1.5rem;
+  color: var(--secondary-color);
+  font-size: 1.5rem;
+  padding-top: 1rem;
+}
+
+.stats-cards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  text-align: left;
+}
+
+.stat-card h3 {
+  color: var(--secondary-color);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-card p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.recent-jobs h2 {
+  margin-bottom: 2rem;
+}
+
+.view-jobs-section {
+  background: white;
+  border-radius: 8px;
+  padding: 0.1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 /* Table Styles */
 .table-responsive {
-  overflow-x: scroll;
-  padding: 0px;
-  max-height: 65vh;
-  overflow-y: auto;
-}
-
-tbody {
-  padding: 10px;
+  overflow-x: auto;
+  margin-top: 1rem;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.95rem;
 }
 
 th,
 td {
-  padding: 1rem;
+  padding: 0.75rem;
   text-align: left;
-  border-bottom: 1px solid #ecf0f1;
+  border-bottom: 1px solid #e9ecef;
 }
 
 th {
-  background: #f8f9fa;
+  background: var(--light-gray);
   font-weight: 600;
-  color: #34495e;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-tr:hover {
-  background: #f8f9fa;
 }
 
 /* Action Buttons */
@@ -134,33 +172,21 @@ tr:hover {
 
 .edit-btn,
 .delete-btn {
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 0.8rem;
   border: none;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  font-weight: 500;
+  border-radius: 4px;
+  font-size: 0.8rem;
   cursor: pointer;
-  transition: all 0.2s ease;
 }
 
 .edit-btn {
-  background: #3498db;
+  background: var(--primary-color);
   color: white;
-}
-
-.edit-btn:hover {
-  background: #2980b9;
-  transform: translateY(-1px);
 }
 
 .delete-btn {
-  background: #e74c3c;
+  background: var(--accent-color);
   color: white;
-}
-
-.delete-btn:hover {
-  background: #c0392b;
-  transform: translateY(-1px);
 }
 
 /* Status Messages */
@@ -169,51 +195,45 @@ tr:hover {
 .no-jobs {
   text-align: center;
   padding: 2rem;
-  font-size: 1.1rem;
 }
 
 .loading {
-  color: #3498db;
+  color: var(--primary-color);
 }
 
 .error {
-  color: #e74c3c;
+  color: var(--accent-color);
 }
 
 .no-jobs {
-  color: #7f8c8d;
+  color: #6c757d;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .modal-header {
+@media (max-width: 767px) {
+  .mobile-menu-toggle {
+    position: fixed;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: white;
+    border: none;
+    border-radius: 4px;
     padding: 0.5rem;
-    background: #f8f9fa;
-    border-bottom: 1px solid #dfe6e9;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    font-size: 1rem;
+    z-index: 101;
+    cursor: pointer;
+    display: block;
   }
-  .modal-header h2 {
-    margin: 0;
-    color: #2c3e50;
-    font-size: 1.1rem;
+  .stats-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
   }
-  .admin-panel {
-    padding: 0.7rem;
+  .main-content {
+    margin-left: 0px;
+    padding: 1rem;
   }
-
-  .ReactModal__Content {
-    width: 95% !important;
-    height: 98vh !important;
-    top: 50% !important;
-    left: 50% !important;
-    right: auto !important;
-    bottom: auto !important;
-    transform: translate(-50%, -50%) !important;
-    padding: 0px !important;
-  }
-
   table,
   thead,
   tbody,
@@ -223,52 +243,45 @@ tr:hover {
     display: block;
   }
 
-  /* Hide table headers */
   thead tr {
     position: absolute;
     top: -9999px;
     left: -9999px;
   }
 
-  /* Style each job row as a card */
   tr {
     border: 1px solid #ddd;
     border-radius: 8px;
-    margin-bottom: 0.3rem;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
   }
 
-  /* Style each data cell */
+  .rjltd {
+    padding-left: 20px;
+  }
+
   td {
     border: none;
-    padding: 0.25rem 0;
+    padding: 0.5rem;
     position: relative;
-    padding-left: 45%; /* Space for the label */
-    min-height: 1.5em; /* Ensure consistent height */
+    padding-left: 50%;
   }
 
-  /* Style the pseudo-element labels */
   td:before {
     position: absolute;
     left: 0.5rem;
-    width: 40%;
+    width: 45%;
     padding-right: 0.5rem;
     white-space: nowrap;
     font-weight: bold;
     content: attr(data-label);
-    color: #555; /* Make labels slightly muted */
   }
 
-  /* Special handling for action buttons */
   .actions {
-    grid-column: 1 / -1;
-    display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
     padding-left: 0 !important;
-    margin-top: 0.5rem;
-    padding-top: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
     border-top: 1px solid #eee;
   }
 
@@ -277,48 +290,10 @@ tr:hover {
   }
 
   .actions button {
-    flex: 1;
-    max-width: 120px;
-    margin: 0 0.25rem;
-  }
-
-  /* Ensure content doesn't overlap with labels */
-  td > * {
-    display: block;
-    text-overflow: ellipsis;
-  }
-
-  .edit-btn,
-  .delete-btn {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
-  }
-
-  .table-responsive {
-    overflow-x: scroll;
-    padding: 0px;
-    max-height: 95vh;
-    overflow-y: auto;
+    flex: none;
+    margin-right: 0.5rem;
   }
 }
 
-/* @media (max-width: 576px) {
-  .admin-panel h1 {
-    font-size: 1.6rem;
-  }
-
-  .table-responsive {
-    padding: 0rem;
-  }
-
-  th,
-  td {
-    padding: 0.6rem;
-    font-size: 0.85rem;
-  }
-
-  .actions {
-    flex-direction: column;
-    gap: 0.3rem;
-  }
-} */
+/* Font Awesome for icons */
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css");

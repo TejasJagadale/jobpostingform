@@ -1,18 +1,30 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import JobForm from "./JobForm";
-import Modal from "react-modal";
 import "./AdminPanel.css";
-
-// Set modal root for accessibility (required by react-modal)
-Modal.setAppElement("#root");
 
 const AdminPanel = () => {
   const [jobs, setJobs] = useState([]);
   const [editingJob, setEditingJob] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    fetchJobs();
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+      if (window.innerWidth >= 768) {
+        setShowMobileMenu(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     fetchJobs();
@@ -68,6 +80,8 @@ const AdminPanel = () => {
         : job.requirements || ""
     };
     setEditingJob(jobToEdit);
+    setActiveTab("add-job");
+    setShowMobileMenu(false);
   };
 
   const handleDelete = async (jobId) => {
@@ -84,108 +98,182 @@ const AdminPanel = () => {
     }
   };
 
-  // Modal styles (customize as needed)
-  const modalStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      marginRight: "-50%",
-      transform: "translate(-50%, -50%)",
-      width: "80%",
-      maxWidth: "800px",
-      overflow: "auto",
-      borderRadius: "8px",
-      padding: "20px"
-    }
+  const toggleMobileMenu = () => {
+    setShowMobileMenu(!showMobileMenu);
   };
 
   return (
-    <div className="admin-panel">
-      <h1>Job Listings Admin Panel</h1>
-
-      {/* Button to open modal */}
-      <button className="view-jobs-btn" onClick={() => setIsModalOpen(true)}>
-        View All Jobs ({jobs.length})
+    <div className="admin-dashboard">
+      {/* Mobile Menu Toggle Button */}
+      <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
+        <i className="fas fa-bars"></i>
       </button>
 
-      <div className="form-section">
-        <JobForm
-          onSubmit={handleSubmitSuccess}
-          initialData={editingJob || {}}
-          isEditMode={!!editingJob}
-        />
-      </div>
-
-      {/* Modal for displaying jobs */}
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
-        style={modalStyles}
-        contentLabel="Job Listings"
-      >
-        <div className="modal-header">
-          <h2>Manage Job Listings ({jobs.length})</h2>
-          <button
-            className="close-modal-btn"
-            onClick={() => setIsModalOpen(false)}
-          >
-            &times;
-          </button>
+      {/* Sidebar */}
+      <div className={`sidebar ${!isMobile || showMobileMenu ? "show" : ""}`}>
+        <div className="sidebar-header">
+          <h2>Admin Panel</h2>
         </div>
 
-        {loading ? (
-          <div className="loading">Loading jobs...</div>
-        ) : error ? (
-          <div className="error">{error}</div>
-        ) : jobs.length === 0 ? (
-          <div className="no-jobs">No jobs found.</div>
-        ) : (
-          <div className="table-responsive">
-            <table>
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Company</th>
-                  <th>Location</th>
-                  <th>Type</th>
-                  <th>Category</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {jobs.map((job) => (
-                  <tr key={job._id}>
-                    <td data-label="Title">{job.title}</td>
-                    <td data-label="Company">{job.company}</td>
-                    <td data-label="Location">{job.location}</td>
-                    <td data-label="Type">{job.type}</td>
-                    <td data-label="Category">{job.category}</td>
-                    <td className="actions">
-                      <button
-                        className="edit-btn"
-                        onClick={() => {
-                          handleEdit(job);
-                          setIsModalOpen(false);  
-                        }}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="delete-btn"
-                        onClick={() => handleDelete(job._id)}
-                      >
-                        Delete
-                      </button>
-                    </td>
+        <ul className="sidebar-menu">
+          <li
+            className={activeTab === "dashboard" ? "active" : ""}
+            onClick={() => {
+              setActiveTab("dashboard");
+              if (isMobile) setShowMobileMenu(false);
+            }}
+          >
+            <i className="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </li>
+          <li
+            className={activeTab === "add-job" ? "active" : ""}
+            onClick={() => {
+              setActiveTab("add-job");
+              setEditingJob(null);
+              if (isMobile) setShowMobileMenu(false);
+            }}
+          >
+            <i className="fas fa-plus-circle"></i>
+            <span>Add New Job</span>
+          </li>
+          <li
+            className={activeTab === "view-jobs" ? "active" : ""}
+            onClick={() => {
+              setActiveTab("view-jobs");
+              if (isMobile) setShowMobileMenu(false);
+            }}
+          >
+            <i className="fas fa-briefcase"></i>
+            <span>View All Jobs ({jobs.length})</span>
+          </li>
+        </ul>
+      </div>
+
+      {/* Main Content */}
+      <div className="main-content">
+        {activeTab === "dashboard" && (
+          <div className="dashboard-overview">
+            <h1>Dashboard Overview</h1>
+            <div className="stats-cards">
+              <div className="stat-card">
+                <h3>Total Jobs</h3>
+                <p>{jobs.length}</p>
+              </div>
+              <div className="stat-card">
+                <h3>IT Jobs</h3>
+                <p>{jobs.filter((job) => job.category === "IT").length}</p>
+              </div>
+              <div className="stat-card">
+                <h3>Govt Jobs</h3>
+                <p>{jobs.filter((job) => job.category === "Govt").length}</p>
+              </div>
+            </div>
+
+            <div className="recent-jobs">
+              <h2>Recent Job Listings</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Company</th>
+                    <th>Type</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {jobs.slice(0, 10).map((job) => (
+                    <tr key={job._id}>
+                      <td className="rjltd">{job.title}</td>
+                      <td className="rjltd">{job.company}</td>
+                      <td className="rjltd">{job.type}</td>
+                      <td className="actions">
+                        <button
+                          className="edit-btn"
+                          onClick={() => handleEdit(job)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="delete-btn"
+                          onClick={() => handleDelete(job._id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
-      </Modal>
+
+        {activeTab === "add-job" && (
+          <div className="form-section">
+            <h1>{editingJob ? "Edit Job Listing" : "Add New Job Listing"}</h1>
+            <JobForm
+              onSubmit={handleSubmitSuccess}
+              initialData={editingJob || {}}
+              isEditMode={!!editingJob}
+            />
+          </div>
+        )}
+
+        {activeTab === "view-jobs" && (
+          <div className="view-jobs-section">
+            <h1>All Job Listings ({jobs.length})</h1>
+
+            {loading ? (
+              <div className="loading">Loading jobs...</div>
+            ) : error ? (
+              <div className="error">{error}</div>
+            ) : jobs.length === 0 ? (
+              <div className="no-jobs">No jobs found.</div>
+            ) : (
+              <div className="table-responsive">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Company</th>
+                      <th>Location</th>
+                      <th>Type</th>
+                      <th>Category</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {jobs.map((job) => (
+                      <tr key={job._id}>
+                        <td data-label="Title">{job.title}</td>
+                        <td data-label="Company">{job.company}</td>
+                        <td data-label="Location">{job.location}</td>
+                        <td data-label="Type">{job.type}</td>
+                        <td data-label="Category">{job.category}</td>
+                        <td className="actions">
+                          <button
+                            className="edit-btn"
+                            onClick={() => handleEdit(job)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="delete-btn"
+                            onClick={() => handleDelete(job._id)}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

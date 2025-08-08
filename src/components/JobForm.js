@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "./JobForm.css";
 
 const JobForm = ({ onSubmit, initialData = {}, isEditMode = false }) => {
@@ -8,7 +7,7 @@ const JobForm = ({ onSubmit, initialData = {}, isEditMode = false }) => {
     company: "",
     location: "",
     salary: "",
-    category: "IT", // New field for IT/Govt category
+    category: "IT",
     type: "Full-time",
     description: "",
     requirements: "",
@@ -19,27 +18,12 @@ const JobForm = ({ onSubmit, initialData = {}, isEditMode = false }) => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Job categories (IT or Govt)
   const jobCategories = ["IT", "Govt"];
 
-  // Job types based on category
   const getJobTypes = (category) => {
-    const itTypes = [
-      "Full-time",
-      "Part-time",
-      "Contract",
-      "Internship",
-      "Freelance"
-    ];
-    const govtTypes = [
-      "Government",
-      "State Government",
-      "Central Government",
-      "Public Sector",
-      "Municipal"
-    ];
-
-    return category === "Govt" ? govtTypes : itTypes;
+    return category === "Govt" 
+      ? ["Government", "State Government", "Central Government", "Public Sector", "Municipal"]
+      : ["Full-time", "Part-time", "Contract", "Internship", "Freelance"];
   };
 
   useEffect(() => {
@@ -48,7 +32,7 @@ const JobForm = ({ onSubmit, initialData = {}, isEditMode = false }) => {
         ? initialData.requirements.join("\n")
         : initialData.requirements || "";
 
-      setJobData((prev) => ({
+      setJobData(prev => ({
         ...prev,
         ...initialData,
         requirements: requirementsStr
@@ -59,27 +43,20 @@ const JobForm = ({ onSubmit, initialData = {}, isEditMode = false }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setJobData((prev) => {
-      const newState = {
-        ...prev,
-        [name]: value
-      };
-
-      // If category changes, reset dependent fields
+    setJobData(prev => {
+      const newState = { ...prev, [name]: value };
+      
       if (name === "category") {
-        const newTypes = getJobTypes(value);
         return {
           ...newState,
-          type: newTypes[0]
+          type: getJobTypes(value)[0]
         };
       }
-
       return newState;
     });
 
-    // Clear error when user starts typing
     if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
+      setErrors(prev => ({ ...prev, [name]: "" }));
     }
   };
 
@@ -89,8 +66,7 @@ const JobForm = ({ onSubmit, initialData = {}, isEditMode = false }) => {
     if (!jobData.company) newErrors.company = "Company is required";
     if (!jobData.location) newErrors.location = "Location is required";
     if (!jobData.description) newErrors.description = "Description is required";
-    if (!jobData.requirements)
-      newErrors.requirements = "Requirements are required";
+    if (!jobData.requirements) newErrors.requirements = "Requirements are required";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -98,25 +74,19 @@ const JobForm = ({ onSubmit, initialData = {}, isEditMode = false }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) return;
 
     setIsSubmitting(true);
-
     try {
       const formattedData = {
         ...jobData,
-        requirements: jobData.requirements
-          .split("\n")
-          .filter((item) => item.trim() !== "")
+        requirements: jobData.requirements.split("\n").filter(item => item.trim() !== "")
       };
-
-      // Call onSubmit with the data (let AdminPanel handle the API call)
-      onSubmit(formattedData); // Pass raw data instead of making API call here
+      
+      onSubmit(formattedData);
 
       if (!isEditMode) {
-        // Reset form
-        setJobData((prev) => ({
+        setJobData(prev => ({
           title: "",
           company: "",
           location: "",
@@ -130,145 +100,147 @@ const JobForm = ({ onSubmit, initialData = {}, isEditMode = false }) => {
       }
     } catch (error) {
       console.error("Error submitting job:", error);
-      const errorMsg = error.response?.data?.message || error.message;
-      alert(`Failed to ${isEditMode ? "update" : "add"} job: ${errorMsg}`);
+      alert(`Failed to ${isEditMode ? "update" : "add"} job: ${error.message}`);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Get current job types based on selected category
   const currentJobTypes = getJobTypes(jobData.category);
 
   return (
     <div className="job-form-container">
-      <h2>{isEditMode ? "Edit Job Listing" : "Add New Job Listing"}</h2>
       <form onSubmit={handleSubmit}>
-        {/* Category Dropdown - IT or Govt */}
-        <div className="form-group">
-          <label>Job Category*</label>
-          <select
-            name="category"
-            value={jobData.category}
-            onChange={handleChange}
-          >
-            {jobCategories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label>Job Title*</label>
-          <input
-            type="text"
-            name="title"
-            value={jobData.title}
-            onChange={handleChange}
-            className={errors.title ? "error" : ""}
-            placeholder="Enter job title"
-          />
-          {errors.title && (
-            <span className="error-message">{errors.title}</span>
-          )}
-        </div>
-
-        <div className="form-row">
+        <div className="form-grid">
+          {/* Category */}
           <div className="form-group">
-            <label>Company*</label>
+            <label htmlFor="category">Job Category</label>
+            <select
+              id="category"
+              name="category"
+              value={jobData.category}
+              onChange={handleChange}
+            >
+              {jobCategories.map(category => (
+                <option key={category} value={category}>{category}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Job Title */}
+          <div className="form-group">
+            <label htmlFor="title">Job Title <span className="required">*</span></label>
             <input
+              id="title"
+              type="text"
+              name="title"
+              value={jobData.title}
+              onChange={handleChange}
+              className={errors.title ? "error" : ""}
+              placeholder="Software Engineer"
+            />
+            {errors.title && <div className="error-message">{errors.title}</div>}
+          </div>
+
+          {/* Company */}
+          <div className="form-group">
+            <label htmlFor="company">Company <span className="required">*</span></label>
+            <input
+              id="company"
               type="text"
               name="company"
               value={jobData.company}
               onChange={handleChange}
               className={errors.company ? "error" : ""}
-              placeholder="Enter company name"
+              placeholder="Google, Amazon, etc."
             />
-            {errors.company && (
-              <span className="error-message">{errors.company}</span>
-            )}
+            {errors.company && <div className="error-message">{errors.company}</div>}
           </div>
 
+          {/* Location */}
           <div className="form-group">
-            <label>Location*</label>
+            <label htmlFor="location">Location <span className="required">*</span></label>
             <input
+              id="location"
               type="text"
               name="location"
               value={jobData.location}
               onChange={handleChange}
               className={errors.location ? "error" : ""}
-              placeholder="Enter job location"
+              placeholder="Bangalore, Remote, etc."
             />
-            {errors.location && (
-              <span className="error-message">{errors.location}</span>
-            )}
+            {errors.location && <div className="error-message">{errors.location}</div>}
           </div>
-        </div>
 
-        <div className="form-row">
+          {/* Salary */}
           <div className="form-group">
-            <label>Salary Range</label>
+            <label htmlFor="salary">Salary Range</label>
             <input
+              id="salary"
               type="text"
               name="salary"
               value={jobData.salary}
               onChange={handleChange}
-              placeholder="e.g. ₹8,00,000 - ₹12,00,000 per year"
+              placeholder="₹8,00,000 - ₹12,00,000 per year"
             />
           </div>
 
+          {/* Job Type */}
           <div className="form-group">
-            <label>Job Type*</label>
-            <select name="type" value={jobData.type} onChange={handleChange}>
-              {currentJobTypes.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
+            <label htmlFor="type">Job Type</label>
+            <select
+              id="type"
+              name="type"
+              value={jobData.type}
+              onChange={handleChange}
+            >
+              {currentJobTypes.map(type => (
+                <option key={type} value={type}>{type}</option>
               ))}
             </select>
           </div>
-        </div>
 
-        <div className="form-group">
-          <label>Description*</label>
-          <textarea
-            name="description"
-            value={jobData.description}
-            onChange={handleChange}
-            className={errors.description ? "error" : ""}
-            rows="4"
-          />
-          {errors.description && (
-            <span className="error-message">{errors.description}</span>
-          )}
-        </div>
+          {/* Description */}
+          <div className="form-group full-width">
+            <label htmlFor="description">Description <span className="required">*</span></label>
+            <textarea
+              id="description"
+              name="description"
+              value={jobData.description}
+              onChange={handleChange}
+              className={errors.description ? "error" : ""}
+              rows="5"
+            />
+            {errors.description && <div className="error-message">{errors.description}</div>}
+          </div>
 
-        <div className="form-group">
-          <label>Requirements (one per line)*</label>
-          <textarea
-            name="requirements"
-            value={jobData.requirements}
-            onChange={handleChange}
-            className={errors.requirements ? "error" : ""}
-            rows="4"
-            placeholder="Enter each requirement on a new line"
-          />
-          {errors.requirements && (
-            <span className="error-message">{errors.requirements}</span>
-          )}
-        </div>
+          {/* Requirements */}
+          <div className="form-group full-width">
+            <label htmlFor="requirements">Requirements (one per line) <span className="required">*</span></label>
+            <textarea
+              id="requirements"
+              name="requirements"
+              value={jobData.requirements}
+              onChange={handleChange}
+              className={errors.requirements ? "error" : ""}
+              rows="5"
+              placeholder="Enter each requirement on a new line"
+            />
+            {errors.requirements && <div className="error-message">{errors.requirements}</div>}
+          </div>
 
-        <div className="form-group">
-          <label>Application Link</label>
-          <input
-            type="url"
-            name="applyLink"
-            value={jobData.applyLink}
-            onChange={handleChange}
-            placeholder="https://example.com/apply"
-          />
+          {/* Application Link */}
+          <div className="form-group full-width">
+            <label htmlFor="applyLink">Application Link</label>
+            <input
+              id="applyLink"
+              type="url"
+              name="applyLink"
+              value={jobData.applyLink}
+              onChange={handleChange}
+              placeholder="https://example.com/apply"
+            />
+          </div>
         </div>
 
         <button type="submit" className="submit-button" disabled={isSubmitting}>
